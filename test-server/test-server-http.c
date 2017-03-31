@@ -219,6 +219,10 @@ try_to_reuse:
         }
         break;
 
+        case LWS_CALLBACK_ESTABLISHED: {
+            lwsl_info("callback established!\n");
+        }
+        break;
         default:
         break;
     }

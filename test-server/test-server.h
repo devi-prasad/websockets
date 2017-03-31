@@ -124,14 +124,7 @@ struct per_session_data__lws_status {
 };
 
 struct per_session_data__lws_multicall {
-    uint8_t req_code;
-    uint8_t name_len;
-    uint8_t email_len;
-    uint8_t telnum_len;
-    char    content[16]; /* name + email + telnum + 16-byte regnum */
-    char    name[32];
-    char    email[32];
-    char    telnum[16];
+    time_t last_accessed;
 };
 
 
