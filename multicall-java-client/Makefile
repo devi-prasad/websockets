@@ -1,4 +1,5 @@
 all:
+	@if [ ! -d "out" ]; then mkdir out; fi
 	javac src/multicall/*.java  -cp lib/jetty-all-9.0.5.v20130815.jar -d out
 
 clean:

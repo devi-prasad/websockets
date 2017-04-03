@@ -82,6 +82,7 @@ public class UserRegController implements WebSocketListener {
 	@Override
 	public void onWebSocketError(Throwable t) {
 	    System.out.println("onWebSocketError: " + t.toString());
+        disconnectWithGateway();
 	}
 
     @Override
