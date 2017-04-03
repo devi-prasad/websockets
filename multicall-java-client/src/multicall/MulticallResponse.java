@@ -3,6 +3,8 @@ package multicall;
 import java.util.Arrays;
 
 public class MulticallResponse {
+    public static final int MULTICALL_USER_REG_RESPONSE = 127;
+    
 	Byte code;
     String regnum;
     boolean email_registered;
@@ -19,8 +21,6 @@ public class MulticallResponse {
     public String getRegistrationNumber() { return this.regnum; }
     public boolean isEmailRegistered()    { return this.email_registered; }
     public boolean isTelephoneNumRegistered() { return this.telnum_registered; }
-    
-    public static final int MULTICALL_USER_REG_RESPONSE = 127;
 
     public static MulticallResponse parse(byte[] payload, int offset, int len) {
     	MulticallResponse response = null;

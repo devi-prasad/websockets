@@ -17,8 +17,8 @@ class MulticallUserRegTest {
                     assert(response.getCode() == 
                 	           MulticallResponse.MULTICALL_USER_REG_RESPONSE);
                     assert(response.isEmailRegistered() == false);
+                    controller.disconnectWithGateway();
                     System.out.println("user registration succeeded!");
-                    //controller.disconnectWithGateway();
                 }
             });
         controller.connectWithGateway();

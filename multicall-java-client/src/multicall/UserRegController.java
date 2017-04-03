@@ -43,20 +43,16 @@ public class UserRegController implements WebSocketListener {
         }
     }
 
-    public boolean awaitClose(int duration, TimeUnit unit) throws InterruptedException {
+    public boolean waitForResponse(int duration, TimeUnit unit) 
+                                                throws InterruptedException
+    {
         return this.closeLatch.await(duration, unit);
     }
 
 	public void onClose(int statusCode, String reason) {
 		System.out.printf("Connection closed: %d - %s%n", statusCode, reason);
-/*		try {
-		    if (this.session.isOpen()) {
-			    this.session.close( going away 1001, "waited too long!");
-		    }
-		} catch (IOException ioex) {}
-*/
 		this.session = null;
-		this.closeLatch.countDown(); // trigger latch
+		this.closeLatch.countDown();
 	}
 
 	@Override
@@ -131,8 +127,8 @@ public class UserRegController implements WebSocketListener {
             System.out.printf("Connecting to : %s%n", uri);
             endpoint.connect(this, uri, ur);
 
-            // wait for closed socket connection.
-            this.awaitClose(10, TimeUnit.SECONDS);
+            // wait for a finite duration for the response
+            this.waitForResponse(10, TimeUnit.SECONDS);
         }
         catch (Exception e) {
             System.out.println("Exception: " + e.toString());
