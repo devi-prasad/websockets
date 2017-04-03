@@ -6,42 +6,40 @@ import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
 public class MulticallRequest {
-    private static final byte REG_USER_REQ  = 32;
-    private static final byte EMAIL_OTP_REQ = 33;
-    private static final byte SMS_OTP_REQ   = 34;
+    public static final byte MULTICALL_USER_REG_REQUEST  = 32;
+    public static final byte MULTICALL_EMAIL_OTP_REQUEST = 33;
+    public static final byte MULTICALL_SMS_OTP_REQ       = 34;
 
     private byte[] request;
 
-    private MulticallRequest(byte[] packet) {
-        this.request = packet;
+    private MulticallRequest(byte[] request) {
+        this.request = request;
     }
 
     public byte[] getBytes() { return this.request; }
 
-    public static MulticallRequest buildRegUserRequest(String name,
-                                                       String email,
-                                                       String telnum,
-                                                       String regnum)
+    public static MulticallRequest createUserRegRequest(String name,
+                                                        String email,
+                                                        String telnum)
     {
         assert(name.length() >= 3 && name.length() <= 64);
         assert(email.length() >= 3 && email.length() < 32);
         assert(telnum.length() >= 10 && telnum.length() < 32);
-        assert(regnum.length() == 16);
 
+        byte[] regnum = new byte[16]; // will be initialized to zeros.
         MulticallRequest req = null;
 
         try {
             byte[] asciiName = name.getBytes("US-ASCII"); // or "ISO-8859-1"
             byte[] asciiEmail = email.getBytes("US-ASCII");
             byte[] asciitTel = telnum.getBytes("US-ASCII");
-            byte[] asciiReg = regnum.getBytes("US-ASCII");
 
             ByteArrayOutputStream output = new java.io.ByteArrayOutputStream();
-            output.write(REG_USER_REQ);
+            output.write(MULTICALL_USER_REG_REQUEST);
             output.write(asciiName.length);
             output.write(asciiEmail.length);
             output.write(asciitTel.length);
-            output.write(asciiReg);
+            output.write(regnum);
             output.write(asciiName);
             output.write(asciiEmail);
             output.write(asciitTel);
@@ -55,16 +53,16 @@ public class MulticallRequest {
         return req;
     }
 
+/*
     public static void main(String[] args)
     {
-        MulticallRequest mcreq = MulticallRequest.buildRegUserRequest(
+        MulticallRequest mcreq = MulticallRequest.createUserRegRequest(
                 "devi prasad",
                 "devi.prasad@vlead.ac.in",
-                "9867850032",
-                "92f72f474c9ecf6f");
+                "9867850032");
         byte[] reqbytes = mcreq.getBytes();
         assert(reqbytes.length ==  4+11+23+10+16);
-        assert(reqbytes[0] == MulticallRequest.REG_USER_REQ);
+        assert(reqbytes[0] == MulticallRequest.MULTICALL_USER_REG_REQUEST);
         assert(reqbytes[1] == 11); // "devi prasad"
         assert(reqbytes[2] == 23); // "devi.prasad@vlead.ac.in"
         assert(reqbytes[3] == 10); // "9867850032"
@@ -81,19 +79,20 @@ public class MulticallRequest {
         assert(new String(bytes).equals("9867850032"));
 
         bytes = Arrays.copyOfRange(reqbytes, 48, reqbytes.length);
-        assert(new String(bytes).equals("92f72f474c9ecf6f"));
+        assert(new String(bytes).equals("0000000000000000"));
     }
+*/
 
-    public static byte[] getRequestBytes()
+/*    public static byte[] getRequestBytes()
     {
-        MulticallRequest mcreq = MulticallRequest.buildRegUserRequest(
+        MulticallRequest mcreq = MulticallRequest.createUserRegRequest(
                 "devi prasad",
                 "devi.prasad@vlead.ac.in",
                 "9867850032",
                 "92f72f474c9ecf6f");
         byte[] reqbytes = mcreq.getBytes();
         assert(reqbytes.length ==  4+11+23+10+16);
-        assert(reqbytes[0] == MulticallRequest.REG_USER_REQ);
+        assert(reqbytes[0] == MulticallRequest.MULTICALL_USER_REG_REQUEST);
         assert(reqbytes[1] == 11); // "devi prasad"
         assert(reqbytes[2] == 23); // "devi.prasad@vlead.ac.in"
         assert(reqbytes[3] == 10); // "9867850032"
@@ -101,7 +100,7 @@ public class MulticallRequest {
         byte[] bytes = null;
 
         bytes = Arrays.copyOfRange(reqbytes, 4, 20);
-        assert(new String(bytes).equals("92f72f474c9ecf6f"));   
+        assert(new String(bytes).equals("0000000000000000"));   
 
         bytes = Arrays.copyOfRange(reqbytes, 20, 31);
         assert(new String(bytes).equals("devi prasad"));
@@ -114,5 +113,5 @@ public class MulticallRequest {
 
         
         return  mcreq.getBytes();
-    }
+    }*/
 }

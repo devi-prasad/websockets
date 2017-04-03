@@ -1,49 +1,23 @@
 package multicall;
 
-import java.net.URI;
+
 import java.util.concurrent.TimeUnit;
 
-import org.eclipse.jetty.websocket.client.ClientUpgradeRequest;
-import org.eclipse.jetty.websocket.client.WebSocketClient;
 
 public class MulticallUser {
-	final static String destUri = "ws://127.0.0.1:12345";
 
-	public static void main(String[] args)
-    {
-		connect();
+    String name, email, telnum;
+
+    public MulticallUser(String name, String email, String telnum) {
+    	assert(name.length() > 0 && name.length() < 32);
+        this.name = name;
+        assert(email.length() > 0 && email.length() < 32);
+        this.email = email;
+        assert(telnum.length() > 0 && telnum.length() < 16);
+        this.telnum = telnum;
     }
 
-	private static void connect() {
-        WebSocketClient client = new WebSocketClient();
-        SocketListener socket = new SocketListener();
-        try
-        {
-            client.start();
-
-            URI uri = new URI(destUri);
-            ClientUpgradeRequest request = new ClientUpgradeRequest();
-            request.setSubProtocols("multicall-user");
-            System.out.printf("Connecting to : %s%n", uri);
-            client.connect(socket, uri, request);
-
-            // wait for closed socket connection.
-            socket.awaitClose(10, TimeUnit.SECONDS);
-        }
-        catch (Exception e)
-        {
-            System.out.println("Exception: " + e.toString());
-        }
-        finally
-        {
-            try
-            {
-                client.stop();
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-        }
-	}
+    public String getName() { return this.name; }
+    public String getEmail() { return this.email; }
+    public String getTelnum() { return this.telnum; }
 }
